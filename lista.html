@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<title>Lista de Tarefas</title>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="./css/todolist.css" rel="stylesheet">
+</head>
+<body>
+	<div id="container" class="container pt-5">
+		<button id="logout">FECHAR</button>
+		<h1>Lista de Tarefas</h1>
+		<p>This is some text.</p>
+		<div class="row">
+			<div class="col">Nome</div>
+			<div class="col">Descrição</div>
+			<div class="col">Prioridade</div>
+			<div class="col">Data de registro</div>
+			<div class="col">Data final</div>
+		</div>
+		<div id="list" class="d-flex flex-wrap">
+		</div>	
+	</div>
+	<script src="./js/lista.js"></script>	
+</body>
+</html>
