@@ -10,19 +10,19 @@
 </head>
 <body>
 	<div id="container" class="container pt-5">
-		<button id="logout">FECHAR</button>
-		<h1>Lista de Tarefas</h1>
-		<p>This is some text.</p>
-		<div class="row">
-			<div class="col">Nome</div>
-			<div class="col">Descrição</div>
-			<div class="col">Prioridade</div>
-			<div class="col">Data de registro</div>
-			<div class="col">Data final</div>
+		<h1>Olá, <span id="username"></span><br>Essa é a sua lista de Tarefas.</h1><br>
+		<button type="button" class="btn btn-info" id="logout">Finalizar sessão</button>
+		<div class="column">
+			<div class="row">Total de tarefas: <span id="totaltasks"></span></div>
+			<div class="row">Tarefas concluídas: <span id="totalfinished"></span></div>
+			<div class="row">Tarefas fora do prazo definido: <span id="totaloutoflimit"></span></div>
+			<div class="row">Total de tarefas com prioridade baixa: <span id="totalbaixa"></span></div>
+			<div class="row">Total de tarefas com prioridade média: <span id="totalmedia"></span></div>
+			<div class="row">Total de tarefas com prioridade alta: <span id="totalalta"></span></div>
 		</div>
 		<div id="list" class="d-flex flex-wrap">
 		</div>	
 	</div>
-	<script src="./js/lista.js"></script>	
+	<script src="./js/lista.js"></script>		
 </body>
 </html>

@@ -6,6 +6,10 @@ if (token) {
   const decodedPayload = JSON.parse(atob(payload)); // Decodifica o payload usando a classe Base64 e converte para objeto JSON
   const userId = decodedPayload.userId
 
+  const username = document.getElementById('username');
+  username.innerHTML = decodedPayload.name + "!";
+  username.style.color = "purple";
+
   const toDoList = async() =>{
     const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
     const data = await response.data;
@@ -97,7 +101,29 @@ if (token) {
 
   }
 
+  const toDoDetails = async () => {
+    const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
+    const data = await response.data;
+    
+    const totalTasks = document.getElementById('totaltasks');
+    const totalBaixa = document.getElementById('totalbaixa');
+    const totalMedia = document.getElementById('totalmedia');
+    const totalAlta = document.getElementById('totalalta');
+    const totalOutOfLimit = document.getElementById('totaloutoflimit');
+    const totalFinished = document.getElementById('totalfinished');
+
+    totalTasks.innerHTML = data.totalTasks;
+    totalAlta.innerHTML = data.totalAlta;
+    totalBaixa.innerHTML = data.totalBaixa;
+    totalMedia.innerHTML = data.totalMedia;
+    totalOutOfLimit.innerHTML = data.totalOutOfLimit;
+    //totalFinished.innerHTML = data.totalFinished;
+
+  }
+
+
   toDoList()
+  toDoDetails();
 
 } else {
   window.location.replace("index.html")
