@@ -20,6 +20,33 @@
 			<div class="row">Total de tarefas com prioridade média: <span id="totalmedia"></span></div>
 			<div class="row">Total de tarefas com prioridade alta: <span id="totalalta"></span></div>
 		</div>
+
+		
+		<form id="formEditarTarefa" style="display: none;">
+			<div class="mb-3">
+				<input id="todoListId" type="hidden" value="0">
+				<label for="todoName" class="form-label">Nome:</label>
+				<input type="text" class="form-control" id="todoName" name="todoName">
+			</div>
+			<div class="mb-3">
+				<label for="tarefaDescricao" class="form-label">Descrição:</label>
+				<textarea class="form-control" id="todoDescription" name="todoDescription" rows="3"></textarea>
+			</div>
+			<div class="mb-3 d-flex align-items-center">
+				<label for="selectPrioridade" class="me-2">Prioridade:</label>
+				<select class="form-select" id="selectPriority" name="selectPriority">
+					<option value="BAIXA" selected>BAIXA</option>
+					<option value="MÉDIA">MÉDIA</option>
+					<option value="ALTA">ALTA</option>
+				</select>
+				<input type="date" class="form-control ms-2" id="todoFinalDate" name="todoFinalDate">
+				<button type="submit" class="btn btn-primary">Alterar</button>
+			</div>
+		</form>
+
+
+		
+
 		<div id="list" class="d-flex flex-wrap">
 		</div>	
 	</div>

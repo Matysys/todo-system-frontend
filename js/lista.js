@@ -10,6 +10,8 @@ if (token) {
   username.innerHTML = decodedPayload.name + "!";
   username.style.color = "purple";
 
+  const formEdit = document.getElementById("formEditarTarefa");
+
   const toDoList = async() =>{
     const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
     const data = await response.data;
@@ -73,18 +75,105 @@ if (token) {
       todoFinalDate.classList.add('card-text');
       cardBody.appendChild(todoFinalDate);
 
+
+
       const btnEdit = document.createElement('button');
+      const btnImg = document.createElement('img')
+      btnImg.setAttribute('src', './img/edit.png')
+      btnImg.style.width = "30px"
+      btnImg.style.height = "30px"
+      btnEdit.style.backgroundColor = "transparent";
+      btnEdit.style.border = "none";
       btnEdit.setAttribute('id', `${item.id}`);
       btnEdit.setAttribute('type', `button`);
 
+      btnEdit.appendChild(btnImg) 
+      cardBody.appendChild(btnEdit);
+
       btnEdit.addEventListener('click', function(){
-        alert(this.id);
+        const todoListId = document.getElementById("todoListId");
+        const todoName = document.getElementById("todoName");
+        const todoDescription = document.getElementById("todoDescription");
+        const selectPriority = document.getElementById("selectPriority");
+        const todoFinalDate = document.getElementById("todoFinalDate");
+
+        todoListId.value = this.id;
+        formEdit.style.display = "block";
+        todoName.value = item.name;
+        todoDescription.value = item.description;
+        selectPriority.value = item.priority;
+        todoFinalDate.value = item.finalDate;
+
       })
 
-      btnEdit.classList.add('btn');
-      btnEdit.classList.add('btn-primary');
-      btnEdit.innerHTML = "Editar tarefa"; 
-      cardBody.appendChild(btnEdit);
+      formEdit.addEventListener("submit", async(event) => {
+        event.preventDefault()
+
+        let taskToUpdate = {
+          id: event.target.todoListId.value,
+          name: event.target.todoName.value,
+          description: event.target.todoDescription.value,
+          priority: event.target.selectPriority.value,
+          finalDate: event.target.todoFinalDate.value,
+          userId: decodedPayload.userId
+        }
+
+        const response = await axios.patch("http://localhost:8080/api/todolist/update", taskToUpdate);
+        console.log(response);
+      })
+
+
+      const btnDelete = document.createElement('button');
+      const btnImg2 = document.createElement('img')
+      btnImg2.setAttribute('src', './img/delete.png')
+      btnImg2.style.width = "30px";
+      btnImg2.style.height = "30px";
+      btnDelete.style.backgroundColor = "transparent";
+      btnDelete.style.border = "none";
+      btnDelete.setAttribute('id', `${item.id}`);
+      btnDelete.setAttribute('type', `button`);
+
+      btnDelete.appendChild(btnImg2) 
+      cardBody.appendChild(btnDelete);
+
+      btnDelete.addEventListener('click', async function(){
+        if(confirm("Quer mesmo apagar essa tarefa?")){
+          try{
+            const id = this.id;
+            const response = await axios.delete(`http://localhost:8080/api/todolist/delete/${id}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+        //alert(token)
+            alert("Tarefa deletada com sucesso!");
+            location.reload();
+          }catch(error){
+            alert(error.response.data);
+          }
+        }
+      })
+
+
+      const btnCompleted = document.createElement('button');
+      const btnImg3 = document.createElement('img')
+      btnImg3.setAttribute('src', './img/completed.png')
+      btnImg3.style.width = "30px";
+      btnImg3.style.height = "30px";
+      btnCompleted.style.backgroundColor = "transparent";
+      btnCompleted.style.border = "none";
+      btnCompleted.setAttribute('id', `${item.id}`);
+      btnCompleted.setAttribute('type', `button`);
+
+      btnCompleted.appendChild(btnImg3) 
+      cardBody.appendChild(btnCompleted);
+
+      btnCompleted.addEventListener('click', function(){
+        //
+      })
+
+
+
 
       const imgTodo = document.createElement('img');
       imgTodo.setAttribute('src', `./img/tasks.png`);
@@ -99,45 +188,45 @@ if (token) {
 
     })
 
-  }
+    }
 
-  const toDoDetails = async () => {
-    const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
-    const data = await response.data;
-    
-    const totalTasks = document.getElementById('totaltasks');
-    const totalBaixa = document.getElementById('totalbaixa');
-    const totalMedia = document.getElementById('totalmedia');
-    const totalAlta = document.getElementById('totalalta');
-    const totalOutOfLimit = document.getElementById('totaloutoflimit');
-    const totalFinished = document.getElementById('totalfinished');
+    const toDoDetails = async () => {
+      const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
+      const data = await response.data;
 
-    totalTasks.innerHTML = data.totalTasks;
-    totalAlta.innerHTML = data.totalAlta;
-    totalBaixa.innerHTML = data.totalBaixa;
-    totalMedia.innerHTML = data.totalMedia;
-    totalOutOfLimit.innerHTML = data.totalOutOfLimit;
+      const totalTasks = document.getElementById('totaltasks');
+      const totalBaixa = document.getElementById('totalbaixa');
+      const totalMedia = document.getElementById('totalmedia');
+      const totalAlta = document.getElementById('totalalta');
+      const totalOutOfLimit = document.getElementById('totaloutoflimit');
+      const totalFinished = document.getElementById('totalfinished');
+
+      totalTasks.innerHTML = data.totalTasks;
+      totalAlta.innerHTML = data.totalAlta;
+      totalBaixa.innerHTML = data.totalBaixa;
+      totalMedia.innerHTML = data.totalMedia;
+      totalOutOfLimit.innerHTML = data.totalOutOfLimit;
     //totalFinished.innerHTML = data.totalFinished;
 
+    }
+
+
+    toDoList()
+    toDoDetails();
+
+  } else {
+    window.location.replace("index.html")
   }
 
+  const btnLogout = document.getElementById("logout")
 
-  toDoList()
-  toDoDetails();
-
-} else {
-  window.location.replace("index.html")
-}
-
-const btnLogout = document.getElementById("logout")
-
-btnLogout.addEventListener("click", () => {
-  localStorage.removeItem("token");
+  btnLogout.addEventListener("click", () => {
+    localStorage.removeItem("token");
   // redireciona para a página de login
-  window.location.href = "index.html";
-});
+    window.location.href = "index.html";
+  });
 
-function convertDate(data){;
-let dataBrasileira = data.split('-').reverse().join('/');
-return dataBrasileira
+  function convertDate(data){;
+  let dataBrasileira = data.split('-').reverse().join('/');
+  return dataBrasileira
 }
