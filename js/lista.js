@@ -11,6 +11,7 @@ if (token) {
   username.style.color = "purple";
 
   const formEdit = document.getElementById("formEditarTarefa");
+  const formCriarTarefa = document.getElementById("formCriarTarefa");
 
   const toDoList = async() =>{
     const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
@@ -117,9 +118,19 @@ if (token) {
           finalDate: event.target.todoFinalDate.value,
           userId: decodedPayload.userId
         }
-
-        const response = await axios.patch("http://localhost:8080/api/todolist/update", taskToUpdate);
-        console.log(response);
+        try{
+        console.log(taskToUpdate);
+        const response = await axios.patch("http://localhost:8080/api/todolist/update", taskToUpdate, {
+          headers: {
+                'Authorization': `Bearer ${token}`
+              }
+        });
+        alert(response.data);
+        location.reload();
+      }catch(error){
+        alert(error.response.data);
+        formEdit.style.display = none;
+      }
       })
 
 
@@ -139,8 +150,8 @@ if (token) {
       btnDelete.addEventListener('click', async function(){
         if(confirm("Quer mesmo apagar essa tarefa?")){
           try{
-            const id = this.id;
-            const response = await axios.delete(`http://localhost:8080/api/todolist/delete/${id}`, {
+            const taskId = this.id;
+            const response = await axios.delete(`http://localhost:8080/api/todolist/delete/${taskId}`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               }
@@ -210,6 +221,30 @@ if (token) {
 
     }
 
+     formCriarTarefa.addEventListener("submit", async(event) => {
+        event.preventDefault()
+
+        let taskToAdd = {
+          name: event.target.todoNewName.value,
+          description: event.target.todoNewDescription.value,
+          priority: event.target.selectNewPriority.value,
+          finalDate: event.target.todoNewFinalDate.value,
+          userId: decodedPayload.userId
+        }
+        try{
+        const response = await axios.post("http://localhost:8080/api/todolist", taskToAdd, {
+          headers: {
+                'Authorization': `Bearer ${token}`
+              }
+        });
+        alert(response.data);
+        location.reload();
+      }catch(error){
+        alert(error.response.data);
+        formEdit.style.display = none;
+      }
+      })
+
 
     toDoList()
     toDoDetails();
@@ -224,6 +259,12 @@ if (token) {
     localStorage.removeItem("token");
   // redireciona para a página de login
     window.location.href = "index.html";
+  });
+
+  const btnTarefa = document.getElementById("criarTarefa");
+
+  btnTarefa.addEventListener('click', function(){
+    formCriarTarefa.style.display = "block";
   });
 
   function convertDate(data){;

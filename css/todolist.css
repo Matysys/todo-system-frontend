@@ -8,3 +8,18 @@ h4{
   margin-bottom: 5px;
 }
 
+h1{
+  text-align: center;
+}
+
+body{
+  background: #320056;
+}
+
+#container{
+  background: white;
+}
+
+h3{
+  text-align: center;
+}

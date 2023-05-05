@@ -11,45 +11,91 @@
 <body>
 	<div id="container" class="container pt-5">
 		<h1>Olá, <span id="username"></span><br>Essa é a sua lista de Tarefas.</h1><br>
-		<button type="button" class="btn btn-info" id="logout">Finalizar sessão</button>
-		<div class="column">
-			<div class="row">Total de tarefas: <span id="totaltasks"></span></div>
-			<div class="row">Tarefas concluídas: <span id="totalfinished"></span></div>
-			<div class="row">Tarefas fora do prazo definido: <span id="totaloutoflimit"></span></div>
-			<div class="row">Total de tarefas com prioridade baixa: <span id="totalbaixa"></span></div>
-			<div class="row">Total de tarefas com prioridade média: <span id="totalmedia"></span></div>
-			<div class="row">Total de tarefas com prioridade alta: <span id="totalalta"></span></div>
+		<div class="d-flex justify-content-center">
+			<button id="criarTarefa" style="margin-right: 10px;"type="button" class="btn btn-info mb-3" id="newTask">Criar uma nova tarefa</button>
+			<button type="button" class="btn btn-danger mb-3" id="logout">Finalizar sessão</button>
 		</div>
 
-		
-		<form id="formEditarTarefa" style="display: none;">
+		<form id="formCriarTarefa" style="display: none;">
+			<h1>Criar uma nova tarefa</h1>
 			<div class="mb-3">
-				<input id="todoListId" type="hidden" value="0">
 				<label for="todoName" class="form-label">Nome:</label>
-				<input type="text" class="form-control" id="todoName" name="todoName">
+				<input type="text" class="form-control" id="todoNewName" name="todoName" required>
 			</div>
 			<div class="mb-3">
 				<label for="tarefaDescricao" class="form-label">Descrição:</label>
-				<textarea class="form-control" id="todoDescription" name="todoDescription" rows="3"></textarea>
+				<textarea class="form-control" id="todoNewDescription" name="todoNewDescription" rows="3" required></textarea>
 			</div>
-			<div class="mb-3 d-flex align-items-center">
-				<label for="selectPrioridade" class="me-2">Prioridade:</label>
-				<select class="form-select" id="selectPriority" name="selectPriority">
-					<option value="BAIXA" selected>BAIXA</option>
-					<option value="MÉDIA">MÉDIA</option>
-					<option value="ALTA">ALTA</option>
-				</select>
-				<input type="date" class="form-control ms-2" id="todoFinalDate" name="todoFinalDate">
-				<button type="submit" class="btn btn-primary">Alterar</button>
+			<div class="row mb-3 align-items-center">
+				<div class="col">
+					<label for="selectNewPrioridade" class="me-2">Prioridade:</label>
+					<select class="form-select" id="selectNewPriority" name="selectNewPriority">
+						<option value="BAIXA" selected>BAIXA</option>
+						<option value="MÉDIA">MÉDIA</option>
+						<option value="ALTA">ALTA</option>
+					</select>
+				</div>
+				<div class="col">
+					<label for="todoFinalDate" class="me-2">Data prevista:</label>
+					<input type="date" class="form-control" id="todoNewFinalDate" name="todoNewFinalDate" required>
+				</div>
 			</div>
+			<button type="submit" class="btn btn-success w-100">Adicionar nova tarefa</button>
 		</form>
 
+		<ul class="list-group mb-3">
+			<h3>Detalhes sobre suas tarefas</h3>
+			<li class="list-group-item d-flex justify-content-between align-items-center">
+				Total de tarefas: <span class="badge bg-primary rounded-pill"id="totaltasks"></span></li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Tarefas concluídas: <span class="badge bg-primary rounded-pill" id="totalfinished"></span></li>
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						Tarefas fora do prazo definido: <span class="badge bg-primary rounded-pill" id="totaloutoflimit"></span></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							Total de tarefas com prioridade baixa: <span class="badge bg-primary rounded-pill" id="totalbaixa"></span></li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								Total de tarefas com prioridade média: <span class="badge bg-primary rounded-pill" id="totalmedia"></span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									Total de tarefas com prioridade alta: <span class="badge bg-primary rounded-pill" id="totalalta"></span></li>
+								</ul>
 
-		
 
-		<div id="list" class="d-flex flex-wrap">
-		</div>	
-	</div>
-	<script src="./js/lista.js"></script>		
-</body>
-</html>
+
+								<form id="formEditarTarefa" style="display: none;">
+									<h1>Alterar tarefa</h1>
+									<div class="mb-3">
+										<input id="todoListId" type="hidden" value="0">
+										<label for="todoName" class="form-label">Nome:</label>
+										<input type="text" class="form-control" id="todoName" name="todoName" required>
+									</div>
+									<div class="mb-3">
+										<label for="tarefaDescricao" class="form-label">Descrição:</label>
+										<textarea class="form-control" id="todoDescription" name="todoDescription" rows="3" required></textarea>
+									</div>
+									<div class="row mb-3 align-items-center">
+										<div class="col">
+											<label for="selectPrioridade" class="me-2">Prioridade:</label>
+											<select class="form-select" id="selectPriority" name="selectPriority">
+												<option value="BAIXA" selected>BAIXA</option>
+												<option value="MÉDIA">MÉDIA</option>
+												<option value="ALTA">ALTA</option>
+											</select>
+										</div>
+										<div class="col">
+											<label for="todoFinalDate" class="me-2">Data prevista:</label>
+											<input type="date" class="form-control" id="todoFinalDate" name="todoFinalDate" required>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-primary w-100">Alterar</button>
+								</form>
+
+
+
+
+
+								<div id="list" class="d-flex flex-wrap">
+								</div>	
+							</div>
+							<script src="./js/lista.js"></script>		
+						</body>
+						</html>
