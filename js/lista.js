@@ -38,6 +38,10 @@ if (token) {
         break;
       default:  
 
+      }
+
+      if(item.finished == "SIM"){
+        backgroundColor = "#BCBCBC";
       }   
 
       const card = document.createElement('div');
@@ -61,10 +65,17 @@ if (token) {
       todoDescription.classList.add('card-text');
       cardBody.appendChild(todoDescription);
 
-      const todoPriority = document.createElement('p');
-      todoPriority.innerHTML = `Prioridade: <span style='color: ${color}; font-weight: bold;'>${item.priority}</span>`;
-      todoPriority.classList.add('card-text');
-      cardBody.appendChild(todoPriority);
+      if(item.finished != "SIM"){
+        const todoPriority = document.createElement('p');
+        todoPriority.innerHTML = `Prioridade: <span style='color: ${color}; font-weight: bold;'>${item.priority}</span>`;
+        todoPriority.classList.add('card-text');
+        cardBody.appendChild(todoPriority);
+      }else{
+        const todoFinalizada = document.createElement('p');
+        todoFinalizada.innerHTML = `<span style='color: #3AFF00; font-weight: bold; font-size: 20px; text-align: center;'>CONCLUÍDA</span>`;
+        todoFinalizada.classList.add('card-text');
+        cardBody.appendChild(todoFinalizada);
+      }
 
       const todoRegistrationDate = document.createElement('p');
       todoRegistrationDate.innerHTML = `<span style="font-weight: bold;">Data de criação da tarefa:</span> ${convertDate(item.registrationDate)}`;
@@ -76,8 +87,7 @@ if (token) {
       todoFinalDate.classList.add('card-text');
       cardBody.appendChild(todoFinalDate);
 
-
-
+      if(item.finished != "SIM"){
       const btnEdit = document.createElement('button');
       const btnImg = document.createElement('img')
       btnImg.setAttribute('src', './img/edit.png')
@@ -106,33 +116,6 @@ if (token) {
         todoFinalDate.value = item.finalDate;
 
       })
-
-      formEdit.addEventListener("submit", async(event) => {
-        event.preventDefault()
-
-        let taskToUpdate = {
-          id: event.target.todoListId.value,
-          name: event.target.todoName.value,
-          description: event.target.todoDescription.value,
-          priority: event.target.selectPriority.value,
-          finalDate: event.target.todoFinalDate.value,
-          userId: decodedPayload.userId
-        }
-        try{
-        console.log(taskToUpdate);
-        const response = await axios.patch("http://localhost:8080/api/todolist/update", taskToUpdate, {
-          headers: {
-                'Authorization': `Bearer ${token}`
-              }
-        });
-        alert(response.data);
-        location.reload();
-      }catch(error){
-        alert(error.response.data);
-        formEdit.style.display = none;
-      }
-      })
-
 
       const btnDelete = document.createElement('button');
       const btnImg2 = document.createElement('img')
@@ -179,11 +162,26 @@ if (token) {
       btnCompleted.appendChild(btnImg3) 
       cardBody.appendChild(btnCompleted);
 
-      btnCompleted.addEventListener('click', function(){
-        //
+      btnCompleted.addEventListener('click', async function(){
+        if(confirm("Sua tarefa foi realmente concluída?")){
+          try{
+            const taskId = this.id;
+            console.log(taskId);
+            const response = await axios.patch(`http://localhost:8080/api/todolist/finish/${taskId}`, {}, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+        //alert(token)
+            alert("Sua tarefa agora está concluída!!!");
+            location.reload();
+          }catch(error){
+            alert(error.response);
+          }
+        }
       })
 
-
+    }
 
 
       const imgTodo = document.createElement('img');
@@ -196,78 +194,106 @@ if (token) {
 
 
 
-
     })
 
-    }
+}
 
-    const toDoDetails = async () => {
-      const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
-      const data = await response.data;
+const toDoDetails = async () => {
+  const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
+  const data = await response.data;
+  console.log(data);
 
-      const totalTasks = document.getElementById('totaltasks');
-      const totalBaixa = document.getElementById('totalbaixa');
-      const totalMedia = document.getElementById('totalmedia');
-      const totalAlta = document.getElementById('totalalta');
-      const totalOutOfLimit = document.getElementById('totaloutoflimit');
-      const totalFinished = document.getElementById('totalfinished');
+  const totalTasks = document.getElementById('totaltasks');
+  const totalBaixa = document.getElementById('totalbaixa');
+  const totalMedia = document.getElementById('totalmedia');
+  const totalAlta = document.getElementById('totalalta');
+  const totalOutOfLimit = document.getElementById('totaloutoflimit');
+  const totalFinished = document.getElementById('totalfinished');
 
-      totalTasks.innerHTML = data.totalTasks;
-      totalAlta.innerHTML = data.totalAlta;
-      totalBaixa.innerHTML = data.totalBaixa;
-      totalMedia.innerHTML = data.totalMedia;
-      totalOutOfLimit.innerHTML = data.totalOutOfLimit;
-    //totalFinished.innerHTML = data.totalFinished;
+  totalTasks.innerHTML = data.totalTasks;
+  totalAlta.innerHTML = data.totalAlta;
+  totalBaixa.innerHTML = data.totalBaixa;
+  totalMedia.innerHTML = data.totalMedia;
+  totalOutOfLimit.innerHTML = data.totalOutOfLimit;
+  totalFinished.innerHTML = data.totalfinished;
 
-    }
+}
 
-     formCriarTarefa.addEventListener("submit", async(event) => {
-        event.preventDefault()
+formCriarTarefa.addEventListener("submit", async(event) => {
+  event.preventDefault()
 
-        let taskToAdd = {
-          name: event.target.todoNewName.value,
-          description: event.target.todoNewDescription.value,
-          priority: event.target.selectNewPriority.value,
-          finalDate: event.target.todoNewFinalDate.value,
-          userId: decodedPayload.userId
-        }
-        try{
-        const response = await axios.post("http://localhost:8080/api/todolist", taskToAdd, {
-          headers: {
-                'Authorization': `Bearer ${token}`
-              }
-        });
-        alert(response.data);
-        location.reload();
-      }catch(error){
-        alert(error.response.data);
-        formEdit.style.display = none;
-      }
-      })
-
-
-    toDoList()
-    toDoDetails();
-
-  } else {
-    window.location.replace("index.html")
+  let taskToAdd = {
+    name: event.target.todoNewName.value,
+    description: event.target.todoNewDescription.value,
+    priority: event.target.selectNewPriority.value,
+    finalDate: event.target.todoNewFinalDate.value,
+    userId: decodedPayload.userId
   }
+  try{
+    const response = await axios.post("http://localhost:8080/api/todolist", taskToAdd, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    alert(response.data);
+    location.reload();
+  }catch(error){
+    alert(error.response.data);
+    formEdit.style.display = none;
+  }
+})
 
-  const btnLogout = document.getElementById("logout")
 
-  btnLogout.addEventListener("click", () => {
-    localStorage.removeItem("token");
+
+
+toDoList()
+toDoDetails();
+
+formEdit.addEventListener("submit", async(event) => {
+  event.preventDefault()
+
+  let taskToUpdate = {
+    id: event.target.todoListId.value,
+    name: event.target.todoName.value,
+    description: event.target.todoDescription.value,
+    priority: event.target.selectPriority.value,
+    finalDate: event.target.todoFinalDate.value,
+    userId: decodedPayload.userId
+  }
+  try{
+    console.log(taskToUpdate);
+    const response = await axios.patch("http://localhost:8080/api/todolist/update", taskToUpdate, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    alert(response.data);
+    location.reload();
+  }catch(error){
+    alert(error.response.data);
+    formEdit.style.display = none;
+  }
+})
+
+} else {
+  window.location.replace("index.html")
+}
+
+const btnLogout = document.getElementById("logout")
+
+btnLogout.addEventListener("click", () => {
+  localStorage.removeItem("token");
   // redireciona para a página de login
-    window.location.href = "index.html";
-  });
+  window.location.href = "index.html";
+});
 
-  const btnTarefa = document.getElementById("criarTarefa");
+const btnTarefa = document.getElementById("criarTarefa");
 
-  btnTarefa.addEventListener('click', function(){
-    formCriarTarefa.style.display = "block";
-  });
+btnTarefa.addEventListener('click', function(){
+  formCriarTarefa.style.display = "block";
+});
 
-  function convertDate(data){;
-  let dataBrasileira = data.split('-').reverse().join('/');
-  return dataBrasileira
+function convertDate(data){;
+let dataBrasileira = data.split('-').reverse().join('/');
+return dataBrasileira
 }
