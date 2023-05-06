@@ -16,7 +16,7 @@ if (token) {
   const toDoList = async() =>{
     const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
     const data = await response.data;
-    console.log(data)
+    console.log("Mateus Lima esteve aqui!\nMostrando como os dados chegam no console...\n\n", data)
 
     let color;
     let backgroundColor;
@@ -72,7 +72,7 @@ if (token) {
         cardBody.appendChild(todoPriority);
       }else{
         const todoFinalizada = document.createElement('p');
-        todoFinalizada.innerHTML = `<span style='color: #3AFF00; font-weight: bold; font-size: 20px; text-align: center;'>CONCLUÍDA</span>`;
+        todoFinalizada.innerHTML = `<div style='color: #3AFF00; font-weight: bold; font-size: 30px; text-align: center;'>CONCLUÍDA</div>`;
         todoFinalizada.classList.add('card-text');
         cardBody.appendChild(todoFinalizada);
       }
@@ -118,7 +118,8 @@ if (token) {
       })
 
       const btnDelete = document.createElement('button');
-      const btnImg2 = document.createElement('img')
+      const btnImg2 = document.createElement('img');
+
       btnImg2.setAttribute('src', './img/delete.png')
       btnImg2.style.width = "30px";
       btnImg2.style.height = "30px";
@@ -126,7 +127,7 @@ if (token) {
       btnDelete.style.border = "none";
       btnDelete.setAttribute('id', `${item.id}`);
       btnDelete.setAttribute('type', `button`);
-
+      
       btnDelete.appendChild(btnImg2) 
       cardBody.appendChild(btnDelete);
 
@@ -166,7 +167,6 @@ if (token) {
         if(confirm("Sua tarefa foi realmente concluída?")){
           try{
             const taskId = this.id;
-            console.log(taskId);
             const response = await axios.patch(`http://localhost:8080/api/todolist/finish/${taskId}`, {}, {
               headers: {
                 'Authorization': `Bearer ${token}`
@@ -198,26 +198,52 @@ if (token) {
 
 }
 
+
 const toDoDetails = async () => {
   const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
   const data = await response.data;
-  console.log(data);
+  console.log("Dethalhes números sobre as tarefas abaixo:\n\n", data);
 
-  const totalTasks = document.getElementById('totaltasks');
-  const totalBaixa = document.getElementById('totalbaixa');
-  const totalMedia = document.getElementById('totalmedia');
-  const totalAlta = document.getElementById('totalalta');
-  const totalOutOfLimit = document.getElementById('totaloutoflimit');
-  const totalFinished = document.getElementById('totalfinished');
-
-  totalTasks.innerHTML = data.totalTasks;
-  totalAlta.innerHTML = data.totalAlta;
-  totalBaixa.innerHTML = data.totalBaixa;
-  totalMedia.innerHTML = data.totalMedia;
-  totalOutOfLimit.innerHTML = data.totalOutOfLimit;
-  totalFinished.innerHTML = data.totalfinished;
-
+  Highcharts.chart('chart-container', {
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: 'Detalhes sobre suas tarefas'
+    },
+    xAxis: {
+      categories: ['Total', 'Baixa prioridade', 'Média prioridade', 'Alta prioridade', 'Fora do prazo', 'Concluídas']
+    },
+    yAxis: {
+      title: {
+        text: 'Quantidade de tarefas'
+      }
+    },
+    plotOptions: {
+      column: {
+        colorByPoint: true,
+        colors: ['#0072C6', '#20A400', '#FFC000', '#C00000', '#3E0000', '#CCCCCC']
+      }
+    },
+    series: [{
+      name: 'Tarefas',
+      data: [data.totalTasks, data.totalBaixa, data.totalMedia, data.totalAlta, data.totalOutOfLimit, data.totalfinished],
+      dataLabels: {
+        enabled: true,
+        color: '#FFFFFF',
+        style: {
+          fontSize: '13px',
+          fontFamily: 'Verdana, sans-serif'
+        }
+      }
+    }]
+  });
 }
+
+
+
+
+
 
 formCriarTarefa.addEventListener("submit", async(event) => {
   event.preventDefault()

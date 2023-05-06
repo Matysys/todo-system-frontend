@@ -43,59 +43,47 @@
 			<button type="submit" class="btn btn-success w-100">Adicionar nova tarefa</button>
 		</form>
 
-		<ul class="list-group mb-3">
-			<h3>Detalhes sobre suas tarefas</h3>
-			<li class="list-group-item d-flex justify-content-between align-items-center">
-				Total de tarefas: <span class="badge bg-primary rounded-pill"id="totaltasks"></span></li>
-				<li class="list-group-item d-flex justify-content-between align-items-center">
-					Tarefas concluídas: <span class="badge bg-primary rounded-pill" id="totalfinished"></span></li>
-					<li class="list-group-item d-flex justify-content-between align-items-center">
-						Tarefas fora do prazo definido: <span class="badge bg-primary rounded-pill" id="totaloutoflimit"></span></li>
-						<li class="list-group-item d-flex justify-content-between align-items-center">
-							Total de tarefas com prioridade baixa: <span class="badge bg-primary rounded-pill" id="totalbaixa"></span></li>
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Total de tarefas com prioridade média: <span class="badge bg-primary rounded-pill" id="totalmedia"></span></li>
-								<li class="list-group-item d-flex justify-content-between align-items-center">
-									Total de tarefas com prioridade alta: <span class="badge bg-primary rounded-pill" id="totalalta"></span></li>
-								</ul>
+
+		<div id="chart-container"></div>
 
 
-
-								<form id="formEditarTarefa" style="display: none;">
-									<h1>Alterar tarefa</h1>
-									<div class="mb-3">
-										<input id="todoListId" type="hidden" value="0">
-										<label for="todoName" class="form-label">Nome:</label>
-										<input type="text" class="form-control" id="todoName" name="todoName" required>
-									</div>
-									<div class="mb-3">
-										<label for="tarefaDescricao" class="form-label">Descrição:</label>
-										<textarea class="form-control" id="todoDescription" name="todoDescription" rows="3" required></textarea>
-									</div>
-									<div class="row mb-3 align-items-center">
-										<div class="col">
-											<label for="selectPrioridade" class="me-2">Prioridade:</label>
-											<select class="form-select" id="selectPriority" name="selectPriority">
-												<option value="BAIXA" selected>BAIXA</option>
-												<option value="MÉDIA">MÉDIA</option>
-												<option value="ALTA">ALTA</option>
-											</select>
-										</div>
-										<div class="col">
-											<label for="todoFinalDate" class="me-2">Data prevista:</label>
-											<input type="date" class="form-control" id="todoFinalDate" name="todoFinalDate" required>
-										</div>
-									</div>
-									<button type="submit" class="btn btn-primary w-100">Alterar</button>
-								</form>
+		<form id="formEditarTarefa" style="display: none;">
+			<h1>Alterar tarefa</h1>
+			<div class="mb-3">
+				<input id="todoListId" type="hidden" value="0">
+				<label for="todoName" class="form-label">Nome:</label>
+				<input type="text" class="form-control" id="todoName" name="todoName" required>
+			</div>
+			<div class="mb-3">
+				<label for="tarefaDescricao" class="form-label">Descrição:</label>
+				<textarea class="form-control" id="todoDescription" name="todoDescription" rows="3" required></textarea>
+			</div>
+			<div class="row mb-3 align-items-center">
+				<div class="col">
+					<label for="selectPrioridade" class="me-2">Prioridade:</label>
+					<select class="form-select" id="selectPriority" name="selectPriority">
+						<option value="BAIXA" selected>BAIXA</option>
+						<option value="MÉDIA">MÉDIA</option>
+						<option value="ALTA">ALTA</option>
+					</select>
+				</div>
+				<div class="col">
+					<label for="todoFinalDate" class="me-2">Data prevista:</label>
+					<input type="date" class="form-control" id="todoFinalDate" name="todoFinalDate" required>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary w-100">Alterar</button>
+		</form>
 
 
 
 
 
-								<div id="list" class="d-flex flex-wrap">
-								</div>	
-							</div>
-							<script src="./js/lista.js"></script>		
-						</body>
-						</html>
+		<div id="list" class="d-flex flex-wrap">
+		</div>	
+	</div>
+	<script src="./js/lista.js"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</body>
+</html>
