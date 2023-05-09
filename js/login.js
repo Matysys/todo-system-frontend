@@ -19,7 +19,7 @@ form.addEventListener("submit", async(event) => {
 		const data = await response.data;
 
 		if (data) {
-			localStorage.setItem('token', data);
+			localStorage.setItem('token', data.token);
 			window.location.replace("./lista.html");
 		}
 
@@ -31,7 +31,7 @@ form.addEventListener("submit", async(event) => {
 		const strongElement = document.createElement('strong');
 		strongElement.textContent = 'Login inválido!';
 		wrongLogin.appendChild(strongElement);
-		wrongLogin.appendChild(document.createTextNode(` ${error.response.data.error}`));
+		wrongLogin.appendChild(document.createTextNode(` ${error.response.data}`));
 
 		const loginForm = document.getElementById('loginForm');
 		loginForm.appendChild(wrongLogin)

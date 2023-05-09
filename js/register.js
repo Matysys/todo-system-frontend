@@ -6,7 +6,29 @@ form.addEventListener("submit", async(event) => {
 	let data = {
 		name: event.target.name.value,
 		password: event.target.password.value,
+		password2: event.target.password2.value,
 		email: event.target.email.value
+	}
+
+	if(data.password != data.password2){
+		const wrongRegister = document.createElement('div');
+		wrongRegister.className = 'alert alert-danger alert-dismissible';
+
+		const registerForm = document.getElementById('registerForm');
+
+		const btnClose = document.createElement('button');
+		btnClose.setAttribute('type', 'button');
+		btnClose.setAttribute('class', 'btn-close');
+		btnClose.setAttribute('data-bs-dismiss', 'alert');
+		wrongRegister.appendChild(btnClose);
+
+		const strongElement = document.createElement('strong');
+		strongElement.textContent = 'Registro inválido!';
+		wrongRegister.appendChild(strongElement);
+		wrongRegister.appendChild(document.createTextNode("As senhas não conferem!"));
+
+		registerForm.appendChild(wrongRegister)
+		return;
 	}
 
 	try {

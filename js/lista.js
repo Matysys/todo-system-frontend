@@ -14,9 +14,21 @@ if (token) {
   const formCriarTarefa = document.getElementById("formCriarTarefa");
 
   const toDoList = async() =>{
-    const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
-    const data = await response.data;
-    console.log("Mateus Lima esteve aqui!\nMostrando como os dados chegam no console...\n\n", data)
+
+    let data = []
+
+      try{
+      const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
+      data = response.data;
+      console.log("Mateus Lima esteve aqui!\nMostrando como os dados chegam no console...\n\n")
+    }catch(error){
+      const msg = document.createElement('h1')
+      msg.style.padding = "50px"
+      msg.textContent = 'Não há tarefas no momento.';
+      document.getElementById('container').appendChild(msg)
+      return;
+    }
+
 
     let color;
     let backgroundColor;
@@ -88,100 +100,100 @@ if (token) {
       cardBody.appendChild(todoFinalDate);
 
       if(item.finished != "SIM"){
-      const btnEdit = document.createElement('button');
-      const btnImg = document.createElement('img')
-      btnImg.setAttribute('src', './img/edit.png')
-      btnImg.style.width = "30px"
-      btnImg.style.height = "30px"
-      btnEdit.style.backgroundColor = "transparent";
-      btnEdit.style.border = "none";
-      btnEdit.setAttribute('id', `${item.id}`);
-      btnEdit.setAttribute('type', `button`);
+        const btnEdit = document.createElement('button');
+        const btnImg = document.createElement('img')
+        btnImg.setAttribute('src', './img/edit.png')
+        btnImg.style.width = "30px"
+        btnImg.style.height = "30px"
+        btnEdit.style.backgroundColor = "transparent";
+        btnEdit.style.border = "none";
+        btnEdit.setAttribute('id', `${item.id}`);
+        btnEdit.setAttribute('type', `button`);
 
-      btnEdit.appendChild(btnImg) 
-      cardBody.appendChild(btnEdit);
+        btnEdit.appendChild(btnImg) 
+        cardBody.appendChild(btnEdit);
 
-      btnEdit.addEventListener('click', function(){
-        const todoListId = document.getElementById("todoListId");
-        const todoName = document.getElementById("todoName");
-        const todoDescription = document.getElementById("todoDescription");
-        const selectPriority = document.getElementById("selectPriority");
-        const todoFinalDate = document.getElementById("todoFinalDate");
+        btnEdit.addEventListener('click', function(){
+          const todoListId = document.getElementById("todoListId");
+          const todoName = document.getElementById("todoName");
+          const todoDescription = document.getElementById("todoDescription");
+          const selectPriority = document.getElementById("selectPriority");
+          const todoFinalDate = document.getElementById("todoFinalDate");
 
-        todoListId.value = this.id;
-        formEdit.style.display = "block";
-        todoName.value = item.name;
-        todoDescription.value = item.description;
-        selectPriority.value = item.priority;
-        todoFinalDate.value = item.finalDate;
+          todoListId.value = this.id;
+          formEdit.style.display = "block";
+          todoName.value = item.name;
+          todoDescription.value = item.description;
+          selectPriority.value = item.priority;
+          todoFinalDate.value = item.finalDate;
 
-      })
+        })
 
-      const btnDelete = document.createElement('button');
-      const btnImg2 = document.createElement('img');
+        const btnDelete = document.createElement('button');
+        const btnImg2 = document.createElement('img');
 
-      btnImg2.setAttribute('src', './img/delete.png')
-      btnImg2.style.width = "30px";
-      btnImg2.style.height = "30px";
-      btnDelete.style.backgroundColor = "transparent";
-      btnDelete.style.border = "none";
-      btnDelete.setAttribute('id', `${item.id}`);
-      btnDelete.setAttribute('type', `button`);
-      
-      btnDelete.appendChild(btnImg2) 
-      cardBody.appendChild(btnDelete);
+        btnImg2.setAttribute('src', './img/delete.png')
+        btnImg2.style.width = "30px";
+        btnImg2.style.height = "30px";
+        btnDelete.style.backgroundColor = "transparent";
+        btnDelete.style.border = "none";
+        btnDelete.setAttribute('id', `${item.id}`);
+        btnDelete.setAttribute('type', `button`);
 
-      btnDelete.addEventListener('click', async function(){
-        if(confirm("Quer mesmo apagar essa tarefa?")){
-          try{
-            const taskId = this.id;
-            const response = await axios.delete(`http://localhost:8080/api/todolist/delete/${taskId}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
-            });
+        btnDelete.appendChild(btnImg2) 
+        cardBody.appendChild(btnDelete);
+
+        btnDelete.addEventListener('click', async function(){
+          if(confirm("Quer mesmo apagar essa tarefa?")){
+            try{
+              const taskId = this.id;
+              const response = await axios.delete(`http://localhost:8080/api/todolist/delete/${taskId}`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                }
+              });
         //alert(token)
-            alert("Tarefa deletada com sucesso!");
-            location.reload();
-          }catch(error){
-            alert(error.response.data);
+              alert("Tarefa deletada com sucesso!");
+              location.reload();
+            }catch(error){
+              alert(error.response.data);
+            }
           }
-        }
-      })
+        })
 
 
-      const btnCompleted = document.createElement('button');
-      const btnImg3 = document.createElement('img')
-      btnImg3.setAttribute('src', './img/completed.png')
-      btnImg3.style.width = "30px";
-      btnImg3.style.height = "30px";
-      btnCompleted.style.backgroundColor = "transparent";
-      btnCompleted.style.border = "none";
-      btnCompleted.setAttribute('id', `${item.id}`);
-      btnCompleted.setAttribute('type', `button`);
+        const btnCompleted = document.createElement('button');
+        const btnImg3 = document.createElement('img')
+        btnImg3.setAttribute('src', './img/completed.png')
+        btnImg3.style.width = "30px";
+        btnImg3.style.height = "30px";
+        btnCompleted.style.backgroundColor = "transparent";
+        btnCompleted.style.border = "none";
+        btnCompleted.setAttribute('id', `${item.id}`);
+        btnCompleted.setAttribute('type', `button`);
 
-      btnCompleted.appendChild(btnImg3) 
-      cardBody.appendChild(btnCompleted);
+        btnCompleted.appendChild(btnImg3) 
+        cardBody.appendChild(btnCompleted);
 
-      btnCompleted.addEventListener('click', async function(){
-        if(confirm("Sua tarefa foi realmente concluída?")){
-          try{
-            const taskId = this.id;
-            const response = await axios.patch(`http://localhost:8080/api/todolist/finish/${taskId}`, {}, {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
-            });
+        btnCompleted.addEventListener('click', async function(){
+          if(confirm("Sua tarefa foi realmente concluída?")){
+            try{
+              const taskId = this.id;
+              const response = await axios.patch(`http://localhost:8080/api/todolist/finish/${taskId}`, {}, {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                }
+              });
         //alert(token)
-            alert("Sua tarefa agora está concluída!!!");
-            location.reload();
-          }catch(error){
-            alert(error.response);
+              alert("Sua tarefa agora está concluída!!!");
+              location.reload();
+            }catch(error){
+              alert(error.response);
+            }
           }
-        }
-      })
+        })
 
-    }
+      }
 
 
       const imgTodo = document.createElement('img');
@@ -199,10 +211,16 @@ if (token) {
 }
 
 
-const toDoDetails = async () => {
+const toDoDetails = async() => {
+  let data = []
+  try{
   const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
-  const data = await response.data;
-  console.log("Dethalhes números sobre as tarefas abaixo:\n\n", data);
+  data = response.data;
+  console.log("Detalhes números sobre as tarefas abaixo:\n\n", data);
+  }catch(error){
+    console.log("Detalhes não existem: HTTP STATUS", error.response.status)
+    
+  }
 
   Highcharts.chart('chart-container', {
     chart: {
