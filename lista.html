@@ -1,3 +1,4 @@
+<!-- Feito por Mateus Moreira Lima -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -16,7 +17,7 @@
 			<button id="criarTarefa" style="margin-right: 10px;"type="button" class="btn btn-info mb-3" id="newTask">Criar uma nova tarefa</button>
 			<button type="button" class="btn btn-danger mb-3" id="logout">Finalizar sessão</button>
 		</div>
-
+		<!-- Formulário para criar as tarefas. -->
 		<form id="formCriarTarefa" style="display: none;">
 			<h1>Criar uma nova tarefa</h1>
 			<div class="mb-3">
@@ -43,11 +44,9 @@
 			</div>
 			<button type="submit" class="btn btn-success w-100">Adicionar nova tarefa</button>
 		</form>
-
 		<!-- Gráfico em colunas do Highchart para os detalhes sobre as tarefas. -->
 		<div id="chart-container"></div>
-
-
+		<!-- Formulário para editar as tarefas. -->
 		<form id="formEditarTarefa" style="display: none;">
 			<h1>Alterar tarefa</h1>
 			<div class="mb-3">
@@ -75,13 +74,9 @@
 			</div>
 			<button type="submit" class="btn btn-primary w-100">Alterar</button>
 		</form>
-
-
+		<!-- Div que vai conter as tarefas. -->
 		<div id="list" class="d-flex flex-wrap">
 		</div>
-
-
-
 	</div>
 	<script src="./js/lista.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>

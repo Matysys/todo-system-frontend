@@ -1,5 +1,6 @@
 const form = document.getElementById("registerForm");
 
+//Função que será executada quando o formulário de registro for submetido.
 form.addEventListener("submit", async(event) => {
 	event.preventDefault()
 
@@ -10,6 +11,7 @@ form.addEventListener("submit", async(event) => {
 		email: event.target.email.value
 	}
 
+	//Se as duas senhas não forem iguais.
 	if(data.password != data.password2){
 		const wrongRegister = document.createElement('div');
 		wrongRegister.className = 'alert alert-danger alert-dismissible';
@@ -31,6 +33,7 @@ form.addEventListener("submit", async(event) => {
 		return;
 	}
 
+	//Tentativa de uma requisição POST para salvar o usuário.
 	try {
 		const response = await axios.post('http://localhost:8080/api/user', data)
 		const goodRegister = document.createElement('div');
@@ -47,6 +50,7 @@ form.addEventListener("submit", async(event) => {
 		btnClose.setAttribute('data-bs-dismiss', 'alert');
 		goodRegister.appendChild(btnClose);
 
+	//Se não for possível salvar, executará o algoritmo abaixo.
 	} catch (error) {
 		console.log(error)
 		const wrongRegister = document.createElement('div');

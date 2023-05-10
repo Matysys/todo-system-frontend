@@ -1,11 +1,15 @@
+//Atribui o valor do Token que veio da API para a constante token.
 const token = localStorage.getItem('token');
 
+//Checa se o Token existe e manda o usuário de volta para a tela de lista de tarefas se existir.
 if(token){
 	window.location.replace("./lista.html")
 }
 
+//Atribuindo o form de login na constante form.
 const form = document.getElementById("loginForm");
 
+//Função que vai executar quando o formulário de login for submetido
 form.addEventListener("submit", async(event) => {
 	event.preventDefault()
 
@@ -14,16 +18,18 @@ form.addEventListener("submit", async(event) => {
 		email: event.target.email.value
 	}
 
+	//Tentativa de uma requisição HTTP POST para a API.
 	try {
 		const response = await axios.post('http://localhost:8080/api/user/login', userLogin)
 		const data = await response.data;
 
+		// Se a resposta da API incluir o token, armazena o token no localStorage.
 		if (data) {
 			localStorage.setItem('token', data.token);
 			window.location.replace("./lista.html");
 		}
 
-				// Se a resposta da API incluir o token, armazena o token no localStorage
+	//Para qualquer erro, criar uma janelinha que demonstre o erro em questão.
 	} catch (error) {
 		console.log(error)
 		const wrongLogin = document.createElement('div');

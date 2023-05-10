@@ -1,23 +1,26 @@
 const token = localStorage.getItem('token');
 
-if (token) {
-  const payload = token.split('.')[1]; // Separa a segunda parte do token
+//Verifica se o Token existe
+if(token) {
+  const payload = token.split('.')[1]; //Separa a segunda parte do token
 
-  const decodedPayload = JSON.parse(atob(payload)); // Decodifica o payload usando a classe Base64 e converte para objeto JSON
+  const decodedPayload = JSON.parse(atob(payload)); //Decodifica o payload usando a classe Base64 e converte para objeto JSON
   const userId = decodedPayload.userId
 
   const username = document.getElementById('username');
-  username.innerHTML = decodedPayload.name + "!";
+  username.innerHTML = decodedPayload.name + "!"; //Coloca o nome de usuário que veio do Token no elemento HTML.
   username.style.color = "purple";
 
   const formEdit = document.getElementById("formEditarTarefa");
   const formCriarTarefa = document.getElementById("formCriarTarefa");
 
+  //Essa função vai criar a lista de tarefas na tela do usuário.
   const toDoList = async() =>{
 
     let data = []
 
-      try{
+    //Tentando fazer uma requisição GET com o id do usuário.
+    try{
       const response = await axios.get(`http://localhost:8080/api/todolist/${userId}`)
       data = response.data;
       console.log("Mateus Lima esteve aqui!\nMostrando como os dados chegam no console...\n\n")
@@ -33,6 +36,7 @@ if (token) {
     let color;
     let backgroundColor;
 
+    //Para cada item da tarefa, executa tal algoritmo.
     data.forEach(item =>{
 
       switch(item.priority){
@@ -152,7 +156,6 @@ if (token) {
                   'Authorization': `Bearer ${token}`
                 }
               });
-        //alert(token)
               alert("Tarefa deletada com sucesso!");
               location.reload();
             }catch(error){
@@ -175,8 +178,10 @@ if (token) {
         btnCompleted.appendChild(btnImg3) 
         cardBody.appendChild(btnCompleted);
 
+
+        //Função que será executada ao clicar no botão de tarefa completada.
         btnCompleted.addEventListener('click', async function(){
-          if(confirm("Sua tarefa foi realmente concluída?")){
+          if(confirm("Sua tarefa foi realmente concluída? Tarefas concluídas não podem ser deletadas.")){
             try{
               const taskId = this.id;
               const response = await axios.patch(`http://localhost:8080/api/todolist/finish/${taskId}`, {}, {
@@ -184,7 +189,6 @@ if (token) {
                   'Authorization': `Bearer ${token}`
                 }
               });
-        //alert(token)
               alert("Sua tarefa agora está concluída!!!");
               location.reload();
             }catch(error){
@@ -194,34 +198,28 @@ if (token) {
         })
 
       }
-
-
       const imgTodo = document.createElement('img');
       imgTodo.setAttribute('src', `./img/tasks.png`);
       imgTodo.setAttribute('alt', `task image`);
       imgTodo.style.width = "100%";
       imgTodo.classList.add('card-image-bottom');
       card.appendChild(imgTodo);
-
-
-
-
     })
 
 }
-
-
+//Função que vai trazer os detalhes sobre as tarefas, como o número totais de tarefas.
 const toDoDetails = async() => {
   let data = []
   try{
-  const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
-  data = response.data;
-  console.log("Detalhes números sobre as tarefas abaixo:\n\n", data);
+    const response = await axios.get(`http://localhost:8080/api/todolist/details/${userId}`)
+    data = response.data;
+    console.log("Detalhes números sobre as tarefas abaixo:\n\n", data);
   }catch(error){
     console.log("Detalhes não existem: HTTP STATUS", error.response.status)
     
   }
 
+  //Biblioteca que vai criar úm gráfico de colunas para os detalhes das tarefas.
   Highcharts.chart('chart-container', {
     chart: {
       type: 'column'
@@ -258,11 +256,7 @@ const toDoDetails = async() => {
   });
 }
 
-
-
-
-
-
+//Função para adicionar uma nova tarefa
 formCriarTarefa.addEventListener("submit", async(event) => {
   event.preventDefault()
 
@@ -290,9 +284,10 @@ formCriarTarefa.addEventListener("submit", async(event) => {
 
 
 
-toDoList()
-toDoDetails();
+toDoList(); //Mostrando as tarefas.
+toDoDetails(); //Mostrando os detalhes das tarefas.
 
+//Função para editar as tarefas.
 formEdit.addEventListener("submit", async(event) => {
   event.preventDefault()
 
@@ -323,20 +318,22 @@ formEdit.addEventListener("submit", async(event) => {
   window.location.replace("index.html")
 }
 
-const btnLogout = document.getElementById("logout")
+const btnLogout = document.getElementById("logout");
 
+//Função para deslogar do sistema.
 btnLogout.addEventListener("click", () => {
   localStorage.removeItem("token");
-  // redireciona para a página de login
   window.location.href = "index.html";
 });
 
 const btnTarefa = document.getElementById("criarTarefa");
 
+//Esse botão vai mostrar o formulário de criar uma nova tarefa
 btnTarefa.addEventListener('click', function(){
   formCriarTarefa.style.display = "block";
 });
 
+//Função pra converter a data do formato americano para o formato brasileiro.
 function convertDate(data){;
 let dataBrasileira = data.split('-').reverse().join('/');
 return dataBrasileira
