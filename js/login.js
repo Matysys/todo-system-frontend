@@ -20,7 +20,7 @@ form.addEventListener("submit", async(event) => {
 
 	//Tentativa de uma requisição HTTP POST para a API.
 	try {
-		const response = await axios.post('http://todolistsystem.dynv6.net:8080/api/user/login', userLogin)
+		const response = await axios.post('https://todolistsystem.dynv6.net:8080/api/user/login', userLogin)
 		const data = await response.data;
 
 		// Se a resposta da API incluir o token, armazena o token no localStorage.
