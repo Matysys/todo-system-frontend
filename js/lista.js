@@ -21,7 +21,7 @@ if(token) {
 
     //Tentando fazer uma requisição GET com o id do usuário.
     try{
-      const response = await axios.get(`https://todolistsystem.dynv6.net:8080/api/todolist/${userId}`)
+      const response = await axios.get(`http://todolistsystem.dynv6.net:8080/api/todolist/${userId}`)
       data = response.data;
       console.log("Mateus Lima esteve aqui!\nMostrando como os dados chegam no console...\n\n")
     }catch(error){
@@ -151,7 +151,7 @@ if(token) {
           if(confirm("Quer mesmo apagar essa tarefa?")){
             try{
               const taskId = this.id;
-              const response = await axios.delete(`https://todolistsystem.dynv6.net:8080/api/todolist/delete/${taskId}`, {
+              const response = await axios.delete(`http://todolistsystem.dynv6.net:8080/api/todolist/delete/${taskId}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -211,7 +211,7 @@ if(token) {
 const toDoDetails = async() => {
   let data = []
   try{
-    const response = await axios.get(`https://todolistsystem.dynv6.net:8080/api/todolist/details/${userId}`)
+    const response = await axios.get(`http://todolistsystem.dynv6.net:8080/api/todolist/details/${userId}`)
     data = response.data;
     console.log("Detalhes números sobre as tarefas abaixo:\n\n", data);
   }catch(error){
@@ -268,7 +268,7 @@ formCriarTarefa.addEventListener("submit", async(event) => {
     userId: decodedPayload.userId
   }
   try{
-    const response = await axios.post("https://todolistsystem.dynv6.net:8080/api/todolist", taskToAdd, {
+    const response = await axios.post("http://todolistsystem.dynv6.net:8080/api/todolist", taskToAdd, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -301,7 +301,7 @@ formEdit.addEventListener("submit", async(event) => {
   }
   try{
     console.log(taskToUpdate);
-    const response = await axios.patch("https://todolistsystem.dynv6.net:8080/api/todolist/update", taskToUpdate, {
+    const response = await axios.patch("http://todolistsystem.dynv6.net:8080/api/todolist/update", taskToUpdate, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
