@@ -184,7 +184,7 @@ if(token) {
           if(confirm("Sua tarefa foi realmente concluída? Tarefas concluídas não podem ser deletadas.")){
             try{
               const taskId = this.id;
-              const response = await axios.patch(`http://localhost:8080/api/todolist/finish/${taskId}`, {}, {
+              const response = await axios.patch(`http://todolistsystem.dynv6.net:8080/api/todolist/finish/${taskId}`, {}, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
