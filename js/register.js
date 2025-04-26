@@ -35,7 +35,7 @@ form.addEventListener("submit", async(event) => {
 
 	//Tentativa de uma requisição POST para salvar o usuário.
 	try {
-		const response = await axios.post('http://todolistsystem.dynv6.net:8080/api/user', data)
+		const response = await axios.post('http://localhost:8080/api/user', data)
 		const goodRegister = document.createElement('div');
 		goodRegister.className = 'alert alert-success alert-dismissible';
 		const strongElement = document.createElement('strong');
